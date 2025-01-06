@@ -1,0 +1,643 @@
+<html>
+<head>
+<base href="https://example.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ultimate Lesson Explainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: background 0.5s ease-in-out;
+        }
+
+        body.dark-mode .container {
+            background: #1e1e1e;
+            color: #f0f0f0;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #1e90ff;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: #1e90ff;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 0;
+            top: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transition: height 0.3s;
+            pointer-events: none;
+        }
+
+        .tab-button:hover::after {
+            height: 100%;
+        }
+
+        .tab-button:hover {
+            background: #1c86ee;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(30, 144, 255, 0.3);
+        }
+
+        .tab-button.active {
+            background: #104e8b;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(16, 78, 139, 0.3);
+        }
+
+        /* Dark Mode Toggle */
+        .toggle-darkmode {
+            background: #333333;
+            color: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .toggle-darkmode:hover {
+            background: #555555;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Home Tab */
+        #home h2 {
+            font-size: 2.5em;
+            color: #1e90ff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #home .ai-illustration {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        #home .ai-illustration svg {
+            width: 150px;
+            height: 150px;
+            fill: #1e90ff;
+            animation: rotate 10s linear infinite;
+        }
+
+        /* Explainer and Dictionary Tabs */
+        .tab-content section {
+            margin-bottom: 30px;
+        }
+
+        .tab-content h2 {
+            font-size: 2em;
+            color: #1e90ff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        form label {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        form input, form select {
+            padding: 15px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+
+        form input:focus, form select:focus {
+            border-color: #1e90ff;
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.2);
+            outline: none;
+        }
+
+        form button {
+            background: #1e90ff;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        form button:hover {
+            background: #1c86ee;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(30, 144, 255, 0.3);
+        }
+
+        /* Loading and Result Boxes */
+        .loading {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .result-box {
+            padding: 25px;
+            background: #f0f4f8;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+        }
+
+        body.dark-mode .result-box {
+            background: #2e2e2e;
+            color: #f0f0f0;
+            border-color: #444;
+        }
+
+        /* About Tab */
+        #about h2 {
+            font-size: 2em;
+            color: #1e90ff;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        #about p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        #about ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        #about ul li {
+            background: linear-gradient(90deg, #1e90ff, #00bfff);
+            color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(30, 144, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        #about .additional-content {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #about .testimonial {
+            background: #e0f7fa;
+            padding: 20px;
+            border-left: 5px solid #1e90ff;
+            border-radius: 5px;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        #about .testimonial::before {
+            content: '💬';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 1.5em;
+        }
+
+        #about .team {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        #about .team-member {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            flex: 1 1 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        #about .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #about .team-member img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        #about .team-member h3 {
+            font-size: 1.2em;
+            color: #1e90ff;
+            margin-bottom: 5px;
+        }
+
+        #about .team-member p {
+            font-size: 1em;
+            color: #555;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab-button {
+                width: 80%;
+                text-align: center;
+            }
+
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            #about .team {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style></head><body><div class="container"><!-- Header --><header class="header"><h1>📘 Ultimate Lesson Explainer</h1><p>The pinnacle of English learning tools.</p></header><!-- Tabs Navigation --><nav class="tabs"><button class="tab-button active" onclick="showTab('home')">Home</button><button class="tab-button" onclick="showTab('explainer')">Explainer</button><button class="tab-button" onclick="showTab('dictionary')">Dictionary</button><button class="tab-button" onclick="showTab('about')">About</button><button class="tab-button toggle-darkmode" onclick="toggleDarkMode()">🌙</button></nav><!-- Tabs Content --><main><!-- Home Tab --><section id="home" class="tab-content active"><h2>Welcome to the Ultimate Lesson Explainer</h2><p>Explore the cutting-edge AI technology that powers our platform:</p><div class="ai-illustration"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" stroke="#1e90ff" stroke-width="4" fill="none"/><path d="M32 16 L32 48" stroke="#1e90ff" stroke-width="4" stroke-linecap="round"/><path d="M16 32 L48 32" stroke="#1e90ff" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="#1e90ff"/></svg></div></section><!-- Explainer Tab --><section id="explainer" class="tab-content"><h2>Lesson Explainer</h2><form id="lessonForm"><label for="lessonName">Lesson Name:</label><input type="text" id="lessonName" placeholder="Enter Lesson Name" required><label for="lessonType">Lesson Type:</label><select id="lessonType" required><option value="" disabled selected>Select Type</option><option value="Supplementary">Supplementary</option><option value="Prose">Prose</option><option value="Poem">Poem</option></select><label for="grade">Grade:</label><input type="number" id="grade" placeholder="Enter Grade" required><button type="submit">🚀 Fetch Lesson Details</button></form><div id="explainerLoading" class="loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Fetching lesson details...</div><div id="explainerResult" class="result-box"></div></section><!-- Dictionary Tab --><section id="dictionary" class="tab-content"><h2>Dictionary</h2><form id="dictionaryForm"><label for="wordInput">Search Word:</label><input type="text" id="wordInput" placeholder="Enter Word" required><button type="submit">🔍 Search</button></form><div id="dictionaryLoading" class="loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Searching...</div><div id="dictionaryResult" class="result-box"></div></section><!-- About Tab --><section id="about" class="tab-content"><h2>About This Program 🌟</h2><p>This program is a heartfelt dedication to our amazing English teacher, <strong>Mrs. Archana</strong>. 💖 Crafted with care by <strong>Kabilan</strong> and inspired by the innovative ideas of <strong>Lohitaksh</strong>, this app is designed to make learning English both enjoyable and effective.</p><p>With its sleek design and advanced features, this program aims to help students shine in their studies while appreciating the beauty of the English language. 📝✨</p><p>Here’s what makes this program special:</p><ul><li>🌟 <strong>AI-Powered Explainer</strong>: Dive into detailed lesson explanations that leave no stone unturned.</li><li>📚 <strong>Comprehensive Dictionary</strong>: A quick and reliable way to find meanings for any word.</li><li>💡 <strong>Modern Design</strong>: User-friendly, elegant, and built for students and teachers alike.</li><li>🌙 <strong>Dark Mode</strong>: A soothing interface for late-night study sessions.</li></ul><div class="additional-content"><div class="testimonial"><p>"This app has transformed the way I teach and my students learn. The AI explainer is incredibly thorough and has made lesson planning a breeze!" - <strong>Mr. Walter Hartwell White Sr.  ,  High School Teacher</strong></p></div><div class="team"><div class="team-member"><img src="https://i.ibb.co/nk7W9zj/MY-PHOTO.jpg" alt="MY-PHOTO" border="0"><h3>Kabilan</h3><p>Lead Developer</p><p>Full-Stack Developer</p><p>UI/UX Designer</p></div><div class="team-member"><img src="https://i.ibb.co/9wh4g25/LOHITAKSH-PHOTO.jpg" alt="LOHITAKSH-PHOTO" border="0""><h3>Lohitaksh</h3><p>No.1 Joker in Milky Way</p><p>Lead Strategist</p><p>Creative Thinker</p></div><div class="team-member"><img src="https://i.ibb.co/jfZrJbw/ARCHANA-MAM-PHOTO.jpg" alt="ARCHANA-MAM-PHOTO" border="0" alt="Mrs. Archana"><h3>Mrs. Archana</h3><p>Educational Consultant</p><p>Sadist</p><p>Feminist</p></div></div></div><p>This app is more than just a tool; it’s a reflection of the hard work, dedication, and inspiration we’ve received from <strong>Mrs. Archana</strong>. Thank you for being a guiding light in our academic journey! 🌹</p><p style="text-align: center; font-size: 1.2em; margin-top: 20px;"><strong>“For our teacher, who inspires us every day—this is for you.” 💖</strong></p></section></main></div>
+      <!-- Include Axios from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+// Tab Switching
+function showTab(tabId) {
+    const tabs = document.querySelectorAll(".tab-content");
+    const buttons = document.querySelectorAll(".tab-button");
+
+    tabs.forEach((tab) => tab.classList.remove("active"));
+    buttons.forEach((button) => {
+        if (!button.classList.contains("toggle-darkmode")) {
+            button.classList.remove("active");
+        }
+    });
+
+    document.getElementById(tabId).classList.add("active");
+    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add("active");
+}
+
+// Dark Mode Toggle
+function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle("dark-mode");
+    const resultBoxes = document.querySelectorAll(".result-box");
+    resultBoxes.forEach((box) => box.classList.toggle("dark-mode"));
+}
+
+// Explainer API Integration (Using new ChatGPT API)
+document.getElementById("lessonForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const lessonName = document.getElementById("lessonName").value;
+    const lessonType = document.getElementById("lessonType").value;
+    const grade = document.getElementById("grade").value;
+
+    const resultBox = document.getElementById("explainerResult");
+    const loading = document.getElementById("explainerLoading");
+
+    loading.style.display = "block";
+    resultBox.innerHTML = "";
+
+    const options = {
+        method: 'POST',
+        url: 'https://chatgpt-best-price.p.rapidapi.com/v1/chat/completions',
+        headers: {
+            'x-rapidapi-key': 'a855e102e2mshf9e8459c19b1739p14cf29jsnfdb95c946e0a',
+            'x-rapidapi-host': 'chatgpt-best-price.p.rapidapi.com',
+            'Content-Type': 'application/json'
+        },
+        data: {
+            model: 'gpt-4o-mini',
+            messages: [
+                {
+                    role: 'user',
+                    content: `Please generate a detailed teacher's guide for the lesson titled "${lessonName}" of type ${lessonType} for grade ${grade}. Include:
+                    - A lesson overview
+                    - The primary objectives
+                    - List,Detailed analysis of the characters, their traits, and significance in the lesson
+                    - Key events with their importance
+                    - A well-organized structure with introduction, activities, and conclusion
+                    - A full list of all the Poetic Devices used,its significance and where it is shwon in the lesson`
+                }
+            ]
+        }
+    };
+
+    try {
+        const response = await axios.request(options);
+
+        // Log the full response to inspect the data structure
+        console.log("API Response:", response.data);
+
+        loading.style.display = "none";
+
+        // Check for different structures in the response
+        if (response.data && response.data.choices && response.data.choices[0].message.content) {
+            resultBox.innerHTML = `<p>${response.data.choices[0].message.content}</p>`;
+        } else {
+            resultBox.innerHTML = "<p>No explanation found for this lesson.</p>";
+        }
+    } catch (err) {
+        loading.style.display = "none";
+        
+        // Log the error for debugging
+        console.error("Error:", err);
+        
+        resultBox.innerHTML = `<p>Error: ${err.message}</p>`;
+    }
+});
+
+// Dictionary API Integration with Extended Features
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("dictionaryForm");
+    const wordInput = document.getElementById("wordInput");
+    const resultBox = document.getElementById("dictionaryResult");
+    const loading = document.getElementById("dictionaryLoading");
+    const wordOfTheDayButton = document.getElementById("wordOfTheDay");
+    const historyBox = document.getElementById("history");
+    const favoritesBox = document.getElementById("favorites");
+
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    // Fetch and display word details
+    function fetchWordDetails(word) {
+        loading.style.display = "block";
+        resultBox.innerHTML = "";
+
+        fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+            .then((response) => response.json())
+            .then((data) => {
+                loading.style.display = "none";
+
+                if (data.title) {
+                    resultBox.innerHTML = `<p>${data.message}</p>`;
+                } else {
+                    const phonetics = data[0].phonetics
+                        .map((phonetic) => `
+                            <p><strong>Phonetic:</strong> ${phonetic.text || "N/A"}</p>
+                            ${phonetic.audio ? `<audio controls src="${phonetic.audio}"></audio>` : ""}`
+                        )
+                        .join("");
+
+                    const meanings = data[0].meanings
+                        .map(
+                            (meaning) => `
+                            <li>
+                                <p><strong>Part of Speech:</strong> ${meaning.partOfSpeech}</p>
+                                <p><strong>Definition:</strong> ${meaning.definitions[0].definition}</p>
+                                ${meaning.definitions[0].example ? `<p><strong>Example:</strong> ${meaning.definitions[0].example}</p>` : ""}
+                                ${meaning.definitions[0].synonyms && meaning.definitions[0].synonyms.length > 0
+                                    ? `<p><strong>Synonyms:</strong> ${meaning.definitions[0].synonyms.join(", ")}</p>`
+                                    : ""}
+                                ${meaning.definitions[0].antonyms && meaning.definitions[0].antonyms.length > 0
+                                    ? `<p><strong>Antonyms:</strong> ${meaning.definitions[0].antonyms.join(", ")}</p>`
+                                    : ""}
+                            </li>`
+                        )
+                        .join("");
+
+                    let customMessage = "";
+                    if (word === "partiality") {
+                        customMessage = `<p><strong>Note:</strong> What Archana Mam Does</p>`;
+                    }
+
+                    resultBox.innerHTML = `
+                        <p><strong>Word:</strong> ${data[0].word}</p>
+                        ${phonetics || "<p>No phonetics or audio available.</p>"}
+                        ${meanings ? `<p><strong>Meanings:</strong></p><ul>${meanings}</ul>` : "<p>No meanings available.</p>"}
+                        ${customMessage}`;
+                }
+            })
+            .catch((err) => {
+                loading.style.display = "none";
+                resultBox.innerHTML = `<p>Error: ${err.message}</p>`;
+            });
+    }
+
+    // Add to history
+    function addToHistory(word) {
+        if (!history.includes(word)) {
+            history.push(word);
+            localStorage.setItem("history", JSON.stringify(history));
+            updateHistoryBox();
+        }
+    }
+
+    // Add to favorites
+    function addToFavorites(word) {
+        if (!favorites.includes(word)) {
+            favorites.push(word);
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            updateFavoritesBox();
+        }
+    }
+
+    // Update history box
+    function updateHistoryBox() {
+        historyBox.innerHTML = `<h3>Search History</h3><ul>${history
+            .map(
+                (word) => `<li>${word} <button onclick="fetchWordDetails('${word}')">View</button></li>`
+            )
+            .join("")}</ul>`;
+    }
+
+    // Update favorites box
+    function updateFavoritesBox() {
+        favoritesBox.innerHTML = `<h3>Favorites</h3><ul>${favorites
+            .map(
+                (word) => `<li>${word} <button onclick="fetchWordDetails('${word}')">View</button></li>`
+            )
+            .join("")}</ul>`;
+    }
+
+    // Fetch Word of the Day from randomword.com
+    function fetchWordOfTheDay() {
+        loading.style.display = "block";
+        resultBox.innerHTML = "";
+
+        fetch('https://randomword.com/')
+            .then(response => response.text())
+            .then(html => {
+                loading.style.display = "none";
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const word = doc.getElementById('random_word').textContent;
+                const definition = doc.getElementById('random_word_definition').textContent;
+
+                resultBox.innerHTML = `
+                    <p><strong>Word of the Day:</strong> ${word}</p>
+                    <p><strong>Definition:</strong> ${definition}</p>`;
+            })
+            .catch(error => {
+                loading.style.display = "none";
+                resultBox.innerHTML = `<p>Error fetching Word of the Day: ${error.message}</p>`;
+            });
+    }
+
+    // Form submit handler
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const word = wordInput.value.toLowerCase();
+        fetchWordDetails(word);
+        addToHistory(word);
+    });
+
+    
+});
+
+
+</script>
+
+</body>
+</html>
