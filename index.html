@@ -1,6 +1,9 @@
 <html>
 <head>
-<base href="https://example.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ultimate Lesson Explainer</title>
+<base href="https://example.com/">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ultimate Lesson Explainer</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
@@ -433,6 +436,34 @@ function toggleDarkMode() {
     resultBoxes.forEach((box) => box.classList.toggle("dark-mode"));
 }
 
+<!-- Include Axios from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+// Tab Switching
+function showTab(tabId) {
+    const tabs = document.querySelectorAll(".tab-content");
+    const buttons = document.querySelectorAll(".tab-button");
+
+    tabs.forEach((tab) => tab.classList.remove("active"));
+    buttons.forEach((button) => {
+        if (!button.classList.contains("toggle-darkmode")) {
+            button.classList.remove("active");
+        }
+    });
+
+    document.getElementById(tabId).classList.add("active");
+    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add("active");
+}
+
+// Dark Mode Toggle
+function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle("dark-mode");
+    const resultBoxes = document.querySelectorAll(".result-box");
+    resultBoxes.forEach((box) => box.classList.toggle("dark-mode"));
+}
+
 // Explainer API Integration (Using new ChatGPT API)
 document.getElementById("lessonForm").addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -461,12 +492,12 @@ document.getElementById("lessonForm").addEventListener("submit", async function 
                 {
                     role: 'user',
                     content: `Please generate a detailed teacher's guide for the lesson titled "${lessonName}" of type ${lessonType} for grade ${grade}. Include:
-                    - A lesson overview
-                    - The primary objectives
-                    - List,Detailed analysis of the characters, their traits, and significance in the lesson
-                    - Key events with their importance
+                    - A Very Brief lesson overview
+                    - All the primary objectives
+                    - List, Detailed analysis of the characters, their traits, and significance in the lesson
+                    - Key events with their importance (Minimum - 20 with a brief explanation for each)
                     - A well-organized structure with introduction, activities, and conclusion
-                    - A full list of all the Poetic Devices used,its significance and where it is shwon in the lesson`
+                    - A full list of all the Poetic Devices used, its significance and where it is shown in the lesson`
                 }
             ]
         }
@@ -480,22 +511,72 @@ document.getElementById("lessonForm").addEventListener("submit", async function 
 
         loading.style.display = "none";
 
-        // Check for different structures in the response
         if (response.data && response.data.choices && response.data.choices[0].message.content) {
-            resultBox.innerHTML = `<p>${response.data.choices[0].message.content}</p>`;
+            const rawContent = response.data.choices[0].message.content;
+            const formattedContent = formatExplainerOutput(rawContent);
+            resultBox.innerHTML = `<div class="formatted-output">${formattedContent}</div>`;
+            addExplainerDownloadButtons(resultBox, lessonName, rawContent);
         } else {
             resultBox.innerHTML = "<p>No explanation found for this lesson.</p>";
         }
     } catch (err) {
         loading.style.display = "none";
         
-        // Log the error for debugging
         console.error("Error:", err);
         
         resultBox.innerHTML = `<p>Error: ${err.message}</p>`;
     }
 });
 
+// Helper Functions for Downloading Output
+function downloadExplainerAsTXT(filename, content) {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${filename}.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+function downloadExplainerAsPDF(filename, content) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const lines = doc.splitTextToSize(content, 180);
+    doc.text(lines, 10, 10);
+    doc.save(`${filename}.pdf`);
+}
+
+function addExplainerDownloadButtons(resultBox, lessonName, content) {
+    const downloadDiv = document.createElement('div');
+    downloadDiv.classList.add('download-buttons');
+
+    const txtButton = document.createElement('button');
+    txtButton.textContent = 'Download as TXT';
+    txtButton.onclick = () => downloadExplainerAsTXT(lessonName, content);
+
+    const pdfButton = document.createElement('button');
+    pdfButton.textContent = 'Download as PDF';
+    pdfButton.onclick = () => downloadExplainerAsPDF(lessonName, content);
+
+    // Remove existing buttons if any
+    const existingButtons = resultBox.querySelector('.download-buttons');
+    if (existingButtons) {
+        existingButtons.remove();
+    }
+
+    downloadDiv.appendChild(txtButton);
+    downloadDiv.appendChild(pdfButton);
+    resultBox.appendChild(downloadDiv);
+}
+
+// Format Explainer Output
+function formatExplainerOutput(content) {
+    return content.replace(/\n/g, "<br>");
+}
+
+// Dictionary API Integration (no changes here)
+// Leave your existing dictionary API logic untouched
+// ...
 // Dictionary API Integration with Extended Features
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -601,29 +682,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .join("")}</ul>`;
     }
 
-    // Fetch Word of the Day from randomword.com
-    function fetchWordOfTheDay() {
-        loading.style.display = "block";
-        resultBox.innerHTML = "";
 
-        fetch('https://randomword.com/')
-            .then(response => response.text())
-            .then(html => {
-                loading.style.display = "none";
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const word = doc.getElementById('random_word').textContent;
-                const definition = doc.getElementById('random_word_definition').textContent;
-
-                resultBox.innerHTML = `
-                    <p><strong>Word of the Day:</strong> ${word}</p>
-                    <p><strong>Definition:</strong> ${definition}</p>`;
-            })
-            .catch(error => {
-                loading.style.display = "none";
-                resultBox.innerHTML = `<p>Error fetching Word of the Day: ${error.message}</p>`;
-            });
-    }
 
     // Form submit handler
     form.addEventListener("submit", (event) => {
